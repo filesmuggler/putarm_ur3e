@@ -97,8 +97,8 @@
   </joint>
   
   <xacro:sensor_d435 parent="d435_link" name="intel_cam" >
-    <origin xyz="0.0 0.065 0.013" rpy="1.570 -1.570 3.140"/>
-     <!-- <origin xyz="0.0 0.08 0.0155" rpy="0 0 0"/> -->
+    <!--<origin xyz="0.0 0.065 0.013" rpy="1.570 -1.570 3.140"/>-->
+     <origin xyz="0.0 0.0905 0.013" rpy="1.570 -1.570 0"/>
   </xacro:sensor_d435>
 
   <link name="dumb_link">

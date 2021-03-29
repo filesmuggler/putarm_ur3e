@@ -21,7 +21,7 @@
 
 
   <include file="$(find putarm_ur3e_moveit_config)/launch/moveit_rviz.launch">
-    <arg name="rviz_config" value="$(find putarm_ur3e_moveit_config)/rviz/ochuj.rviz"/>
+    <arg name="rviz_config" value="$(find putarm_ur3e_moveit_config)/rviz/putarm_ur3e.rviz"/>
   </include>
   
 

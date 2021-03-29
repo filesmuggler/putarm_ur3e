@@ -35,14 +35,14 @@
   </group>
 
   <!-- publish the robot state (tf transforms) -->
-  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+  <!--<node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />-->
 
   <include file="$(find putarm_ur3e_moveit_config)/launch/move_group.launch">
     <arg name="publish_monitored_planning_scene" value="true" />
   </include>
 
   <include file="$(find putarm_ur3e_moveit_config)/launch/moveit_rviz.launch">
-    <arg name="rviz_config" value="true"/>
+    <arg name="rviz_config" value="$(find putarm_ur3e_moveit_config)/rviz/putarm_ur3e.rviz"/>
   </include>
   
   <include file="$(find putarm_ur3e_moveit_config)/launch/default_warehouse_db.launch" />

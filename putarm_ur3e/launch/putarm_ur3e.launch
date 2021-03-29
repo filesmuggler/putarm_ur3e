@@ -1,0 +1,20 @@
+<launch>
+    <arg name="robot_ip" doc="IP address by which the robot can be reached."/>
+    <arg name="limited" default="true" doc="Use the description in limited mode (Every axis rotates from -PI to PI)"/>
+
+    <include file="$(find ur_robot_driver)/launch/ur3e_bringup.launch">
+        <arg name="robot_ip" value="$(arg robot_ip)"/>
+        <arg name="limited" value="$(arg limited)" />
+    </include>
+
+    <include file="$(find putarm_ur3e_moveit_config)/launch/putarm_ur3e_moveit_planning_execution.launch" />
+    
+    <node pkg="putarm_ur3e_moveit_config" type="add_collision_boxes.py" name="add_collision_boxes"/>
+    <node pkg="putarm_ur3e_utils" type="go_home_service.py" name="go_home_service"/>
+    <node pkg="putarm_ur3e_utils" type="goto_object_service.py" name="goto_object_service"/>
+    <node pkg="putarm_ur3e_utils" type="grab_object_service.py" name="grab_object_service"/> 
+
+    <include file="$(find realsense2_camera)/launch/rs_camera.launch"/>
+    <include file="$(find lssn)/launch/lssn_pipeline.launch"/>
+
+</launch>
