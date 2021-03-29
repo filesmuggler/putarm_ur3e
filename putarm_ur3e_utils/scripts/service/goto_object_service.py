@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from putarm_ur3e_moveit_config.srv import GoToObj,GoToObjResponse
+from putarm_ur3e_utils.srv import GoToObj,GoToObjResponse
 import sys
 import copy
 import rospy
@@ -41,14 +41,14 @@ def all_close(goal, actual, tolerance):
 class GotoObject(object):
     def __init__(self):
         super(GotoObject,self).__init__()
-        
-        self.moveit_commander.roscpp_initialize(sys.argv)
-        self.robot = self.moveit_commander.RobotCommander()
-        self.scene = self.moveit_commander.PlanningSceneInterface()
+        rospy.init_node('goto_object_server')
+        moveit_commander.roscpp_initialize(sys.argv)
+        self.robot = moveit_commander.RobotCommander()
+        self.scene = moveit_commander.PlanningSceneInterface()
 
         self.planning_group_name = "manipulator"
 
-        self.planning_move_group = self.moveit_commander.MoveGroupCommander(self.planning_group_name)
+        self.planning_move_group = moveit_commander.MoveGroupCommander(self.planning_group_name)
 
         self.display_trajectory_publisher = rospy.Publisher('/move_group/display_planned_path',
                                                    moveit_msgs.msg.DisplayTrajectory,
@@ -101,33 +101,42 @@ class GotoObject(object):
         move_group.execute(plan, wait=True)
 
     def goto_object(self,req):
-        goal_position = req.pose.position
+        goal_position = req.object_coordinates.position
         #goal_position.z -= 0.05
 
         current_pose = self.planning_move_group.get_current_pose().pose
         current_position = current_pose.position
 
-        no_samples = 50
+        no_samples = 5
 
-        x_linspace = np.linspace(current_position.x,goal_position.x,num=no_samples)
-        y_linspace = np.linspace(current_position.y,goal_position.y,num=no_samples)
-        z_linspace = np.linspace(current_position.z,goal_position.z,num=no_samples)
+        x_linspace = np.linspace(current_position.x,goal_position.x,num=no_samples)[1:]
+        y_linspace = np.linspace(current_position.y,goal_position.y,num=no_samples)[1:]
+        z_linspace = np.linspace(current_position.z,goal_position.z,num=no_samples)[1:]
 
         waypoints = []
-        new_pose = current_pose
-        new_pose.orientation = req.pose.orientation
-
-        for i in range(no_samples):
+        #new_pose = current_pose
+        new_pose = geometry_msgs.msg.Pose()
+        
+        for i in range(no_samples-1):
             new_pose.position.x = x_linspace[i]
             new_pose.position.y = y_linspace[i]
             new_pose.position.z = z_linspace[i]
+            new_pose.orientation = req.object_coordinates.orientation
             waypoints.append(copy.deepcopy(new_pose))
+
+        print(waypoints)
+        #waypoints.pop()
+        
 
         (plan, fraction) = self.planning_move_group.compute_cartesian_path(
                                     waypoints,   # waypoints to follow
                                     0.01,        # eef_step
                                     0.0,         # jump_threshold
                                     avoid_collisions=True)        
-        output = self.planning_move_group.execute(plan,wait=True)
+        self.planning_move_group.execute(plan,wait=True)
 
-        return GoToObjResponse(output)
+        return GoToObjResponse("executed")
+
+if __name__ == "__main__":
+    #ip_rgb_seg_server()
+    goto_object_server = GotoObject()
