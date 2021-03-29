@@ -167,8 +167,8 @@ class GotoObject(object):
 
         self.planning_move_group.stop()
 
-        current_joints = self.planning_move_group.get_current_joint_values()
-        all_close(joint_goal, current_joints, 0.01)
+        #current_joints = self.planning_move_group.get_current_joint_values()
+        #all_close(joint_goal, current_joints, 0.01)
 
         return GoToObjResponse("executed go to object position")
 
