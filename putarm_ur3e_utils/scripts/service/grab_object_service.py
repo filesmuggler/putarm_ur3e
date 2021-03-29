@@ -38,7 +38,6 @@ def all_close(goal, actual, tolerance):
     return True
 
 
-
 class BottleGrab(object):
   def __init__(self):
     super(BottleGrab,self).__init__()
