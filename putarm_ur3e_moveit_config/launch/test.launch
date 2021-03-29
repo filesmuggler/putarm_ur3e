@@ -1,0 +1,15 @@
+<launch>
+
+  <include file="$(find putarm_ur3e_gazebo)/launch/putarm_ur3e_joint_limited.launch">
+  </include>
+
+  <include file="$(find putarm_ur3e_moveit_config)/launch/putarm_ur3e_sim.launch" >
+    <arg name="sim" value="true" />
+    <arg name="limited" value="true" />
+  </include>
+
+  <node pkg="putarm_ur3e_moveit_config" type="add_collision_boxes.py" name="add_collision_boxes"/>
+  <node pkg="putarm_ur3e_moveit_config" type="go_home.py" name="go_home"/>
+  
+
+</launch>

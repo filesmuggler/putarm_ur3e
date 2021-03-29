@@ -1,0 +1,28 @@
+<?xml version="1.0" ?>
+<launch>
+   
+  <!-- the "sim" argument controls whether we connect to a Simulated or Real robot -->
+  <!--  - if sim=false, a robot_ip argument is required -->
+    <arg name="sim" default="false" />
+  <arg name="limited" default="false"/>
+ 
+  <!-- load the robot_description parameter before launching ROS-I nodes -->
+  <include file="$(find putarm_ur3e_moveit_config)/launch/planning_context.launch" >
+    <arg name="load_robot_description" value="true" />
+  </include>
+
+    
+  <!-- Remap follow_joint_trajectory -->
+  <remap if="$(arg sim)" from="/scaled_pos_joint_traj_controller/follow_joint_trajectory" to="/arm_controller/follow_joint_trajectory"/>
+  
+  <!-- Launch moveit -->
+  <include file="$(find putarm_ur3e_moveit_config)/launch/move_group.launch">
+  </include>
+
+
+  <include file="$(find putarm_ur3e_moveit_config)/launch/moveit_rviz.launch">
+    <arg name="rviz_config" value="$(find putarm_ur3e_moveit_config)/rviz/ochuj.rviz"/>
+  </include>
+  
+
+</launch>
