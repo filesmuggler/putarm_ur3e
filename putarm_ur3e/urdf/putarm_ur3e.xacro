@@ -120,6 +120,16 @@
     <parent link="dumb_link"/>
     <child link="dumb_link_2"/>
   </joint>
+
+  <link name="dumb_link_3">
+    <origin xyz="0.0 0.0 0.0" rpy="0 0 0"/>
+  </link>
+
+  <joint name="dumb_joint_3" type="fixed">
+    <origin xyz="0.032 -0.0779 0.0" rpy="0.0 0 0" />
+    <parent link="dumb_link_2"/>
+    <child link="dumb_link_3"/>
+  </joint>
   
   <link name="gripper">
     <visual>
